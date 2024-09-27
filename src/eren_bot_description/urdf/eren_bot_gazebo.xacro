@@ -1,0 +1,171 @@
+<?xml version="1.0"?>
+<diffrobot>
+
+    <gazebo>
+      <plugin name="differential_drive_controller" filename="libgazebo_ros_diff_drive.so">
+
+        <!-- Plugin update rate in Hz -->
+        <update_rate>30.0</update_rate>
+
+        <!-- Name of left and right joints, these must match your URDF joint names -->
+        <left_joint>front_left_wheel_joint</left_joint>
+        <right_joint>front_right_wheel_joint</right_joint>
+
+        <!-- The distance between the center of the two wheels (wheelbase), in meters -->
+        <wheel_separation>0.4</wheel_separation>
+
+        <!-- The diameter of the wheels, in meters -->
+        <wheel_diameter>0.2</wheel_diameter>
+        <!-- Wheel acceleration, in rad/s^2. Set to 0 for infinite acceleration (immediate response) -->
+        <wheel_acceleration>10.0</wheel_acceleration>
+
+        <!-- Maximum torque that the wheels can generate, in Nm -->
+        <wheel_torque>20.0</wheel_torque>
+
+        <!-- Topic to receive velocity commands (geometry_msgs/Twist) -->
+        <command_topic>/cmd_vel</command_topic>
+
+        <!-- Topic to publish odometry data (nav_msgs/Odometry) -->
+        <odometry_topic>/odom</odometry_topic>
+
+        <!-- The frame in which odometry is computed (usually 'odom') -->
+        <odometry_frame>odom</odometry_frame>
+
+        <!-- The base frame of the robot for odometry purposes (usually 'base_link' or 'base_footprint') -->
+        <robot_base_frame>base_link</robot_base_frame>
+
+        <!-- Odometry source: 0 for ENCODER, 1 for WORLD -->
+        <odometry_source>1</odometry_source>
+
+        <!-- Whether to publish wheel joint states (sensor_msgs/JointState) on /joint_states -->
+        <publish_wheel_joint_state>true</publish_wheel_joint_state>
+
+        <!-- Whether to publish tf transforms for the wheels -->
+        <publish_wheel_tf>false</publish_wheel_tf>
+
+        <!-- Whether to publish tf transforms for the odometry -->
+        <publish_odom_tf>true</publish_odom_tf>
+
+        <!-- ROS Debug Level (optional and likely unnecessary) -->
+        <rosDebugLevel>na</rosDebugLevel>
+        
+      </plugin>
+    </gazebo>
+
+
+<gazebo reference="base_link">
+	  	<material>Gazebo/Orange</material>
+	</gazebo>
+
+    <gazebo reference="front_left_wheel">
+	  	<material>Gazebo/Black</material>
+	</gazebo>
+
+    <gazebo reference="front_right_wheel">
+	  	<material>Gazebo/Black</material>
+	</gazebo>
+
+  <gazebo reference="back_right_wheel">
+	  	<material>Gazebo/Black</material>
+	</gazebo>
+
+    <gazebo reference="back_left_wheel">
+	  	<material>Gazebo/Black</material>
+	</gazebo>
+
+  <gazebo reference="lidar_link">
+	  	<material>Gazebo/Black</material>
+	</gazebo>
+
+  <gazebo reference="camera_link">
+	  	<material>Gazebo/Black</material>
+	</gazebo>
+
+
+
+
+
+    
+
+<gazebo reference="laser_data_link">
+		<sensor type="ray" name="rplidar">
+			<pose>0 0 0 0 0 0</pose>
+			<visualize>true</visualize>
+			<update_rate>40</update_rate>
+			<ray>
+				<scan>
+					<horizontal>
+						<samples>720</samples>
+						<resolution>1</resolution>
+						<min_angle>-1.570796327</min_angle>
+						<max_angle>1.570796327</max_angle>
+					</horizontal>
+				</scan>
+				<range>
+					<min>0.10</min>
+					<max>30</max>
+					<resolution>0.1</resolution>
+				</range>
+        
+				<noise>
+					<type>gaussian</type>
+					<mean>0.0</mean>
+					<stddev>0.01</stddev>
+				</noise>
+			</ray>
+			<plugin name="gazebo_ros_head_hokuyo_controller" filename="libgazebo_ros_laser.so">
+				<topicName>/scan</topicName>
+				<frameName>laser_data_link</frameName>
+			</plugin>
+		</sensor>
+	</gazebo>
+
+
+    <!-- camera -->
+  <gazebo>
+    <sensor type="camera" name="camera">
+      <update_rate>30</update_rate>
+      <camera>
+        <horizontal_fov>1.3962634</horizontal_fov>
+        <image>
+          <width>640</width>
+          <height>480</height>
+          <format>R8G8B8</format>
+        </image>
+        <clip>
+          <near>0.1</near>
+          <far>100</far>
+        </clip>
+      </camera>
+      <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+        <alwaysOn>true</alwaysOn>
+        <updateRate>30.0</updateRate>
+        <cameraName>camera</cameraName>
+        <imageTopicName>image_raw</imageTopicName>
+        <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+        <frameName>camera_link</frameName>
+      </plugin>
+    </sensor>
+  </gazebo>
+
+
+  <gazebo reference="back_right_wheel">
+        <kp value="10000000.0"/>
+        <kd value="1.0"/>
+        <mu1>0.1</mu1>
+        <mu2>0.1</mu2>
+	  	<material>Gazebo/Black</material>
+	</gazebo> 
+       
+    <gazebo reference="back_left_wheel">
+        <kp value="10000000.0"/>
+        <kd value="1.0"/>
+        <mu1>0.1</mu1>
+        <mu2>0.1</mu2>
+	  	<material>Gazebo/Black</material>
+	</gazebo>
+
+  
+
+
+</diffrobot>
